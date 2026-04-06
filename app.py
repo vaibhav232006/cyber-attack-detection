@@ -36,11 +36,14 @@ st.write(data.head())
 # Remove last column (labels)
 data = data.iloc[:, :-1]
 
-# Encode categorical columns
+# Convert all columns safely
 for col in data.columns:
-    if data[col].dtype == 'object':
+    try:
+        data[col] = pd.to_numeric(data[col])
+    except:
         le = LabelEncoder()
-        data[col] = le.fit_transform(data[col])
+        data[col] = le.fit_transform(data[col].astype(str))
+
 
 # Scale data
 scaler = StandardScaler()
